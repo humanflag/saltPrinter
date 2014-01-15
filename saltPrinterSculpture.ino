@@ -11,6 +11,14 @@
 // This tutorial is for Adafruit Motorshield v2 only!
 // Will not work with v1 shields
 
+// Why won't my stepper motor go any faster?
+// Since the shield is controlled by i2c, the maximum step rate is limited by the i2c bus speed. 
+//The default bus speed is 100KHz and can be increased to 400KHz 
+//by editing the library file in your Arduino installation folder. 
+//The file can be found in hardware/libraries/wire/utility/twi.h.
+// Find the line with: "#define TWI_FREQ 100000L"
+// and change it to "#define TWI_FREQ 400000L"
+
 #include <AccelStepper.h>
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
@@ -27,6 +35,7 @@ Adafruit_StepperMotor *stepperMotor1_table = AFMS.getStepper(200, 1);
 Adafruit_StepperMotor *stepperMotor2_head = AFMS.getStepper(200, 2);
 
 // you can change these to DOUBLE or INTERLEAVE or MICROSTEP!
+
 void forwardstep1_table() {  
   stepperMotor1_table->onestep(FORWARD, DOUBLE);
 }
@@ -59,10 +68,13 @@ int behindHomeSteps = 200;
 
 long position_end_aStepper2_head = 100 * 65;
 
+
+// connect setup_microswitch from 5v pin 3 and 10k resistor ground
 const int setupPin = 3;
 int setupPinState = 0;
 boolean setupPhase = true;
 
+// connect out_of_bound_microswitch from 5v to pin 2 and 10k resistor ground
 const int outOfBoundPin = 2;
 int outOfBoundState = 0;
 
